@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function captureImage() {
+            var video = document.querySelector('video');
+            var canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            canvas.toBlob(function(blob) {
+                var file = new File([blob], 'webcam_image.png', { type: 'image/png' });
+                var formData = new FormData();
+                formData.append('image', file);
+                formData.append('text', document.getElementById('text').value);
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Image and text uploaded successfully!');
+                        location.reload();
+                    } else {
+                        alert('Upload failed.');
+                    }
+                });
+            });
+        }
+
+        function startWebcam() {
+            var video = document.querySelector('video');
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                }).catch(err => {
+                    console.error("Error accessing webcam: ", err);
+                });
+        }
+    </script>
+</head>
+<body onload="startWebcam()">
+    <h2>Welcome {{ session['username'] }}</h2>
+    <form>
+        <label for="text">Enter Text:</label>
+        <input type="text" id="text" name="text" required><br><br>
+        <button type="button" onclick="captureImage()">Submit</button>
+    </form>
+    <video autoplay></video>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
