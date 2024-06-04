@@ -3,14 +3,16 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import pymongo
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
+import secrets
+import config
 
 app = Flask(__name__)
-# app.secret_key = 'your_secret_key'
+
+app.config.from_object('config')
 
 # MongoDB connection
-url = 'mongodb+srv://nikhilarora13832:nikhil123@cluster0.qwayyb4.mongodb.net/'
-client = pymongo.MongoClient(url)
-db = client['test_mongo']
+client = pymongo.MongoClient(app.config['MONGODB_URL'])
+db = client['sam_database']
 users_collection = db['users']
 data_collection = db['data']
 
