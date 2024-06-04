@@ -1,0 +1,1 @@
+i feel this command is useful to check the free space in log file for all databases in over go

@@ -1,1 +1,0 @@
-When I cancelled an appointment with an idle story. Afterwards it appeared that the person had looked forward to it and reserved time for it.

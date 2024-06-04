@@ -1,0 +1,1 @@
+i used string and pins but i feel they get too messy and cluttered looking

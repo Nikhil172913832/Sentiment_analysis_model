@@ -1,1 +1,0 @@
-Breaking the left hand indicator box by moving too close to structure.
